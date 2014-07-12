@@ -27,6 +27,7 @@
 
 #include "Arduino.h"
 #include "HardwareSerial.h"
+#include <inttypes.h>
 
 #define MAX_CALLBACKS 50
 
@@ -34,14 +35,14 @@ class UAI {
 
 private:
 	HardwareSerial* _serial;
-	void(*callbacks[MAX_CALLBACKS])(int[]);
-	int commands[MAX_CALLBACKS];
-	int lastCallbackIndex;
+	void(*callbacks[MAX_CALLBACKS])(uint8_t[]);
+	uint8_t commands[MAX_CALLBACKS];
+	uint8_t lastCallbackIndex;
 
 public:
 	UAI();
 	void loop();
-	void registerCallback(int code, void (*)(int[]));
+	void registerCallback(uint8_t code, void (*)(uint8_t[]));
 	void setSerial(HardwareSerial &serial);
 };
 

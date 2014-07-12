@@ -24,6 +24,7 @@
 
 #include "Arduino.h"
 #include "HardwareSerial.h"
+#include <inttypes.h>
 #include "UAI.h"
 
 UAI::UAI() {
@@ -36,13 +37,13 @@ void UAI::setSerial(HardwareSerial &serial) {
 
 void UAI::loop() {
 	if (_serial->available()) {
-		int numOfBytes = _serial->read();
-		int data[numOfBytes];
+		uint8_t numOfBytes = _serial->read();
+		uint8_t data[numOfBytes];
 		while (_serial->available() < numOfBytes);
-		for (int i = 0; i < numOfBytes; i++) {
+		for (uint8_t i = 0; i < numOfBytes; i++) {
 			data[i] = _serial->read();
 		}
-		for(int i = 0; i < numOfBytes; i++) {
+		for(uint8_t i = 0; i < numOfBytes; i++) {
 			if(data[0] == commands[i]){
 				callbacks[i](data);
 			}
@@ -50,9 +51,8 @@ void UAI::loop() {
 	}
 }
 
-void UAI::registerCallback(int code, void (*callback)(int[])) {
+void UAI::registerCallback(uint8_t code, void (*callback)(uint8_t[])) {
 	callbacks[lastCallbackIndex] = callback;
 	commands[lastCallbackIndex] = code;
-	_serial->println(commands[lastCallbackIndex]);
 	lastCallbackIndex++;
 }
