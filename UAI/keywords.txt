@@ -1,1 +1,4 @@
 UAI	KEYWORD1
+setStream KEYWORD2
+registerCallback KEYWORD2
+loop KEYWORD2
