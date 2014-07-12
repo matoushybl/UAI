@@ -41,7 +41,7 @@ void UAI::loop() {
 		uint8_t data[numOfBytes];
 		while (stream->available() < numOfBytes);
 		stream->readBytes((char *)data, numOfBytes); // cast because of lower versions of Arduino than 1.5
-		for(uint8_t i = 0; i < numOfBytes; i++) {
+		for(uint8_t i = 0; i < (sizeof(commands)/sizeof(commands[0])); i++) {
 			if(data[0] == commands[i]){
 				callbacks[i](data);
 			}
