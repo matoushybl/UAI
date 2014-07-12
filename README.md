@@ -31,7 +31,7 @@ void callback(uint8_t data[]) {
 On the top level side, you send bytes (therefore not working in Arduino Serial Monitor) using this protocol:
 
 ```C
-uint8_t data = {NUMBER_OF_BYTES, COMMAND_ID, DATA, DATA, DATA, ...};
+uint8_t data[] = {NUMBER_OF_BYTES, COMMAND_ID, DATA, DATA, DATA, ...};
 ```
 NUMBER_OF_BYTES is the length of your array -1, NUMBER_OF_BYTES is not included.
 In the callback you get that array with NUMBER_OF_BYTES excluded.
