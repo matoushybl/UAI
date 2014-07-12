@@ -23,7 +23,7 @@
  */
 
 #include "Arduino.h"
-#include "HardwareSerial.h"
+#include "Stream.h"
 #include <inttypes.h>
 #include "UAI.h"
 
@@ -31,19 +31,17 @@ UAI::UAI() {
 	lastCallbackIndex = 0;
 }
 
-void UAI::setSerial(HardwareSerial &serial) {
-	_serial = &serial;
+void UAI::setStream(Stream &_stream) {
+	stream = &_stream;
 }
 
 void UAI::loop() {
-	if (_serial->available()) {
-		uint8_t numOfBytes = _serial->read();
+	if (stream->available()) {
+		uint8_t numOfBytes = stream->read();
 		uint8_t data[numOfBytes];
-		while (_serial->available() < numOfBytes);
-		for (uint8_t i = 0; i < numOfBytes; i++) {
-			data[i] = _serial->read();
-		}
-		for(uint8_t i = 0; i < numOfBytes; i++) {
+		while (stream->available() < numOfBytes);
+		stream->readBytes((char *)data, numOfBytes); // cast because of lower versions of Arduino than 1.5
+		for(uint8_t i = 0; i < (sizeof(commands)/sizeof(commands[0])); i++) {
 			if(data[0] == commands[i]){
 				callbacks[i](data);
 			}
@@ -55,4 +53,8 @@ void UAI::registerCallback(uint8_t code, void (*callback)(uint8_t[])) {
 	callbacks[lastCallbackIndex] = callback;
 	commands[lastCallbackIndex] = code;
 	lastCallbackIndex++;
+}
+
+void UAI::write(uint8_t *data, uint8_t size) {
+	stream->write(data, size);
 }
