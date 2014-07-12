@@ -26,26 +26,31 @@
 #include "HardwareSerial.h"
 #include "UAI.h"
 
-UAI::UAI(){
+UAI::UAI() {
 	lastCallbackIndex = 0;
 }
 
-void UAI::setSerial(HardwareSerial &serial){
+void UAI::setSerial(HardwareSerial &serial) {
 	_serial = &serial;
 }
 
 void UAI::loop() {
 	if (_serial->available()) {
-		int read = _serial->read();
-		_serial->println(read, DEC);
-		_serial->println(commands[0], DEC);
-		if(read == commands[0]){
-			callbacks[0]("ha");
+		int numOfBytes = _serial->read();
+		int data[numOfBytes];
+		while (_serial->available() < numOfBytes);
+		for (int i = 0; i < numOfBytes; i++) {
+			data[i] = _serial->read();
+		}
+		for(int i = 0; i < numOfBytes; i++) {
+			if(data[0] == commands[i]){
+				callbacks[i](data);
+			}
 		}
 	}
 }
 
-void UAI::registerCallback(int code, void (*callback)(char[])) {
+void UAI::registerCallback(int code, void (*callback)(int[])) {
 	callbacks[lastCallbackIndex] = callback;
 	commands[lastCallbackIndex] = code;
 	_serial->println(commands[lastCallbackIndex]);

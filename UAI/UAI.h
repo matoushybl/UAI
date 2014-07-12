@@ -34,14 +34,14 @@ class UAI {
 
 private:
 	HardwareSerial* _serial;
-	void(*callbacks[MAX_CALLBACKS])(char[]);
+	void(*callbacks[MAX_CALLBACKS])(int[]);
 	int commands[MAX_CALLBACKS];
 	int lastCallbackIndex;
 
 public:
 	UAI();
 	void loop();
-	void registerCallback(int code, void (*)(char[]));
+	void registerCallback(int code, void (*)(int[]));
 	void setSerial(HardwareSerial &serial);
 };
 
