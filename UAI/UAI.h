@@ -44,6 +44,7 @@ public:
 	void loop();
 	void registerCallback(uint8_t code, void (*)(uint8_t[]));
 	void setStream(Stream &_stream);
+	void write(uint8_t *data, uint8_t size);
 };
 
 #endif

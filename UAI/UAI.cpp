@@ -56,3 +56,7 @@ void UAI::registerCallback(uint8_t code, void (*callback)(uint8_t[])) {
 	commands[lastCallbackIndex] = code;
 	lastCallbackIndex++;
 }
+
+void UAI::write(uint8_t *data, uint8_t size) {
+	stream->write(data, size);
+}
